@@ -1,40 +1,40 @@
-window.onload = function() {
-
-  // Prevent Form Submit
-$('#search').submit(function(e) {
-  e.preventDefault();
-});
-
-
-  if (navigator.geolocation) {
-    // support geolocation
-    var success = function(position){
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
-        console.log('here latitude :'+latitude+' && longitude :'+longitude);
-    }
-    var errors = function(){
-        console.log('not working');
-    }
-    navigator.geolocation.getCurrentPosition(success, errors);
-} else {
-    alert('upgrade your browser !');
-};
-
-
-
-
-
-// let bearerToken = document.querySelector('#sink').value
+let bearerToken = document.querySelector('#sink').value
 let button = document.querySelector('#button')
 let result = document.querySelector('#result')
 let keyword = document.getElementById('keyword')
+bearerToken = 'Bearer '+bearerToken;
+
+window.onload = function() {
+
+
+
+
+
+
+  // Prevent Form Submit
+  $('#search').submit(function(e) {
+    e.preventDefault();
+  });
+
+
+   
+  
+
+
 
 
 button.addEventListener('click', function( ) {
+  
 
+  
+
+    // $.ajax(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${late},${long}&key=AIzaSyClV0bMDHQmNhgrZpJwC3-4Srz0wQrlWec`)
+    // .done(function(data) {
+    //   console.log(data);
+    // });
+
+      
   let keyword = $('#keyword').val();
-  let bearerToken = 'Bearer XXXXX'
 	$.ajax({
         url: `https://api.spotify.com/v1/search?q=${keyword}&type=artist&market=US&limit=1`,
         type: 'GET',
@@ -43,7 +43,7 @@ button.addEventListener('click', function( ) {
 	.done(function(response) {
 
 
-        $('#spot-artist').empty();
+  $('#spot-artist').empty();
         
 
     if (response) {
@@ -55,32 +55,26 @@ button.addEventListener('click', function( ) {
       $('#spot-artist').append(`<h1>We don't have any record of that artist.. :(</h1>`) 
     }
     
-
-	console.log(response);
   })
   
 	.fail(function(error) {
 		console.log(error);
   });
 
-  // Get User Location From Google Maps API
-  $.ajax(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=[KEYHERE]`)
-.done(function(data) {
-  console.log(data);
-});
+
 
 // Get Latest Setlist from setlist.fm
-$.ajax({
-  url: `https://api.setlist.fm/rest/1.0/search/setlists?artistName=${keyword}&p=1`,
-  type: 'GET',
-  headers: {"x-api-key": "[KEY]",
-            "Accept": "application/json",
-            'Access-Control-Allow-Origin': 'http://localhost:3000'}
-})
-.done(function(response) {
-  console.log(setlist);
-});
+// $.ajax({
+//   url: `https://api.setlist.fm/rest/1.0/search/setlists?artistName=${keyword}&p=1`,
+//   type: 'GET',
+//   headers: {"x-api-key": "[KEY]",
+//             "Accept": "application/json",
+//             'Access-Control-Allow-Origin': 'http://localhost:3000'}
+// })
+// .done(function(response) {
+//   console.log(setlist);
+// });
 
 
 })
-};
+}
