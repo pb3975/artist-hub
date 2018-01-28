@@ -1,11 +1,128 @@
-<h1>{{title}}</h1>
-<form id="search">
-<h1>Search for any artist below...</h1>
-<input type="search" id="keyword"/>
-<input type ="hidden" id="sink" value="{{bearerToken}}"/>
-<input type="submit" id='button' value="SEARCH"/>
- </form>
- <ol id="spot-artist"></ol>
- <script src="/javascripts/jquery.js"></script>
- <script src="/javascripts/index.js"></script>
+<!DOCTYPE html>
+<html>
+  <head>
+	  <!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+    <title>{{title}}</title>
+    	<link rel="stylesheet" href="/stylesheets/css/linearicons.css">
+		<link rel="stylesheet" href="/stylesheets/css/owl.carousel.css">
+		<link rel="stylesheet" href="/stylesheets/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/stylesheets/css/nice-select.css">
+		<link rel="stylesheet" href="/stylesheets/css/magnific-popup.css">
+		<link rel="stylesheet" href="/stylesheets/css/bootstrap.css">
+		<link rel="stylesheet" href="/stylesheets/css/main.css">
+  </head>
+<body class="dup-body">
+			<div class="dup-body-wrap">
+			<!-- Start Header Area -->
+			<header class="default-header">
+				<div class="header-wrap">
+					<div class="header-top d-flex justify-content-between align-items-center">
+						<div class="logo">
+						</div>
+						<div class="main-menubar d-flex align-items-center">
+							<nav class="hide">
+								<a href="index.html">Home</a>
+							</nav>
+							<div class="menu-bar"><span class="lnr lnr-menu"></span></div>
+						</div>
+					</div>
+				</div>
+			</header>
+		<!-- End Header Area -->
+		<!-- Start Banner Area -->
+		<section class="generic-banner relative">
+			<div class="container">
+				<div class="row height align-items-center justify-content-center">
+					<div class="col-lg-10">
+						<div class="banner-content text-center">
+							<h2>{{title}}</h2>
+							
+									<form  id="search" class="subscription relative">
+										<input type ="hidden" id="sink" value="{{bearerToken}}"/>
+										<input type="search" id="keyword" name="Search" placeholder="Search for an artist..." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Artist Search'" required>
+										<div style="position: absolute; left: -5000px;">
+											<input type="text" name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="">
+										</div>
+									<button id="button" type="submit" class="primary-btn">Search<span class="lnr lnr-arrow-right"></span></button>
+									<div class="info"></div>
+								</form>
+									<div id="spot-artist" ></div>
+									<div></div>
 
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Banner Area -->
+		<!-- Start Video Area -->
+		<section class="video-area" id="img-section" hidden>
+			<div class="overlay overlay-bg"></div>
+			<div class="container">
+				<div id ="spot-artist" class="video-content">
+					<h1 id ="artist-name" class="h1 text-black">Explore Artists</h1>
+					
+				</div>
+				
+			</div>
+		</section>
+		<div>
+		<img id="artist-img" class="img-fluid artist" src="" hidden/> 
+		</div>
+		<!-- Start Artist Area -->
+		<section class="section-gap achivement-area" id="song-section" hidden>
+			<div class="container center-table">
+				<div class="row align-items-center">
+					<div class="section-top-border center-table">
+					<h1 class="mb-30 center-table artist">Top Tracks</h1>
+					<div class="progress-table-wrap">
+						<div id="song-table" class="progress-table artist">
+						
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="video-area" id="concert-section" hidden>
+			<div class="overlay overlay-bg2"></div>
+			<div class="container">
+				<div id="concerts" class="video-content typography">
+					<h1> Concerts </h1>
+				
+			</div>
+		</section>
+		<!-- End Artist Area -->
+		<!-- About Generic Start -->
+		<section class="about-generic-area">
+			<div class="overlay overlay-bg"></div>
+
+		</section>
+		<!-- End Generic Start -->
+
+		<!-- Start Contact Area -->
+		<section class="contact-area">
+			<div class="container">
+				<div class="row">
+					
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Strat Footer Area -->
+		<footer class="section-gap footer-widget-area">
+			
+			</div>
+		</footer>
+		<!-- End Footer Area -->
+		</div>
+
+ </body>
+ 
+ <script src="/javascripts/jquery.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
+ <script src="/javascripts/index.js"></script>

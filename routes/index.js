@@ -1,13 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const SpotifyWebApi = require('spotify-web-api-node')
-
-// const clientId = '1c63d20daf9147c08f4b1f499347ec6f';
-// const clientSecret = '11196469ad734de38ae9068d0ea2fad9';
+const setlistfm = require('setlistfm-js')
+const eventful = require('eventful-node');
+const eventfulClient = new eventful.Client(process.env.EVENTFUL_KEY);
 
 const clientId = process.env.SPOTIFY_CLIENT;
 const clientSecret = process.env.SPOTIFY_SECRET;
+const setlistKey = process.env.SETLIST_KEY;
+let bearerToken;
 
+var setlistfmClient = new setlistfm({
+	key: setlistKey, // Insert your personal key here
+	format: "json", // "json" or "xml", defaults to "json"
+	language: "en", // defaults to "en"
+});
 require('dotenv').config();
 
 /* GET home page. */
@@ -24,9 +31,48 @@ spotifyApi.clientCredentialsGrant()
   .then(function(data) {
     console.log('The access token expires in ' + data.body['expires_in']);
     console.log('The access token is ' + data.body['access_token']);
-    let bearerToken = data.body['access_token'];
+    bearerToken = data.body['access_token'];
 
-  res.render('index', { title: 'Music SPA', bearerToken: bearerToken });
+
+  
+
+  res.render('index', { title: 'Artist-Hub', bearerToken: bearerToken, res: res });
 });
 });
+
+
+router.get('/set/:artist', function(req, res, next) {
+  let artist = req.params.artist
+  
+  setlistfmClient.searchSetlists({
+      artistName: artist
+    })
+      .then(function(results) {
+        // Returns results of the search
+        res.send(results);
+      })
+      .catch(function(error) {
+        // Returns error
+      });
+  });
+
+
+  router.get('/:artist/:city', function(req, res, next) {
+    let artist = req.params.artist
+    let city = req.params.city
+    
+    eventfulClient.searchEvents({
+        keywords: artist,
+        location: city
+
+      }, function(err, data){
+        if (err) {
+          return console.log(err);
+        }
+       else {
+        res.send(data);
+        }
+        });
+
+    });
 module.exports = router;

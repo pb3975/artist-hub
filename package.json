@@ -10,11 +10,15 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^4.0.0",
+    "eventful-node": "^1.1.1",
     "express": "^4.15.5",
     "hbs": "~4.0.1",
     "morgan": "~1.9.0",
     "nodemon": "^1.14.11",
+    "request": "^2.83.0",
     "serve-favicon": "~2.4.5",
+    "setlistfm-js": "^1.1.0",
+    "shasum": "^1.0.2",
     "spotify-web-api-node": "^2.5.0"
   },
   "devDependencies": {
