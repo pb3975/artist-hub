@@ -7,13 +7,13 @@ const eventfulClient = new eventful.Client(process.env.EVENTFUL_KEY);
 
 const clientId = process.env.SPOTIFY_CLIENT;
 const clientSecret = process.env.SPOTIFY_SECRET;
-const setlistKey = process.env.SETLIST_KEY;
+const setlistKey = process.env.SETLIST_FM_KEY;
 let bearerToken;
 
 var setlistfmClient = new setlistfm({
-	key: setlistKey, // Insert your personal key here
-	format: "json", // "json" or "xml", defaults to "json"
-	language: "en", // defaults to "en"
+	key: setlistKey,
+	format: "json", 
+	language: "en", 
 });
 require('dotenv').config();
 
@@ -41,18 +41,18 @@ spotifyApi.clientCredentialsGrant()
 });
 
 
-router.get('/set/:artist', function(req, res, next) {
+router.get('/:artist', function(req, res, next) {
   let artist = req.params.artist
   
   setlistfmClient.searchSetlists({
       artistName: artist
     })
       .then(function(results) {
-        // Returns results of the search
+
         res.send(results);
       })
       .catch(function(error) {
-        // Returns error
+        res.send(error);
       });
   });
 

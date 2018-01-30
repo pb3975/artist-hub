@@ -1,72 +1,55 @@
 let bearerToken = document.querySelector('#sink').value
 let button = document.querySelector('#button')
-let result = document.querySelector('#result')
+// let result = document.querySelector('#result')
 let keyword = document.getElementById('keyword')
-let topSongs = document.querySelector('#top-songs')
-let concerts = document.querySelector('#concerts')
-const setlistButton = document.querySelector('#btn-setlist')
-// let artist;
+// let topSongs = document.querySelector('#top-songs')
+// let concerts = document.querySelector('#concerts')
+
 bearerToken = 'Bearer '+bearerToken;
 
-let currentLatitude;
-let currentLongitude;
-let city;
 
 function getLocation(callback) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(callback);
-    } else { 
-        console.log("Geolocation is not supported by this browser.");
-    }
+    } 
 };
 
 const minutes = (ms) => {
-  ms = 1000*Math.round(ms/1000); // round to nearest second
+  ms = 1000*Math.round(ms/1000);
   let d = new Date(ms);
-  return (d.getUTCMinutes() + ':' + d.getUTCSeconds());
+  let seconds;
+  if (d.getSeconds() < 10) {
+    seconds = ('0' + d.getUTCSeconds().toString());
+  }
+  else {
+    seconds = d.getUTCSeconds();
+  }
+  return (d.getMinutes() + ':' + seconds);
 };
-
-
-const randPic = (picList) => {
-    var pic = picList[Math.floor(Math.random() * picList.length)];
-    return pic;
-};
-window.onload = function() {
-
-
-
-
-
-
-
   // Prevent Form Submit
   $('#search').submit(function(e) {
     e.preventDefault();
   });
 
-
-
-
+  
+// On Search
 button.addEventListener('click', function( ) {
+  $('#setlist-section').fadeOut();
   let keyword = $('#keyword').val();
   let artist;
   // get current coordinates...
   getLocation(function (position) {
     var currentLatitude = position.coords.latitude;
-    var currentLongitude = position.coords.longitude; 
-    console.log(currentLongitude, currentLatitude);  
+    var currentLongitude = position.coords.longitude;
 
     //Get City from Coordinates
     $.ajax(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=AIzaSyClV0bMDHQmNhgrZpJwC3-4Srz0wQrlWec`)
     .done(function(data) {
       if (data.results[1]) {
         //formatted address
-        console.log(data.results[0].formatted_address)
-       //find country name
             for (var i=0; i<data.results[0].address_components.length; i++) {
            for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
                if (data.results[0].address_components[i].types[b] == "administrative_area_level_1") {
-                   //this is the object you are looking for
                    city= data.results[0].address_components[i];
                    break;
                }
@@ -74,45 +57,46 @@ button.addEventListener('click', function( ) {
        }
        //city data
       city = city.long_name;
-      console.log(city);
       // Search For Concerts
       $.ajax({
         url: `/${keyword}/${city}`,
         type: 'GET'}
     )
       .done(function(response) {
-        console.log(response);
         $('#concerts').empty();
         $('#concert-section').removeAttr("hidden");
         if (response.search.total_items > 0 && response.search.events.event[0]) {
-          
         let data = response.search.events.event[0];
         let title = data.title;
-        let date = Date(data.start_time);
-        date = moment(date).format('dddd MMMM D');
+        let date =  moment(data.start_time).format('dddd MMMM D');
         if (keyword.toLowerCase().search(title.toLowerCase()) !== -1) {
       $('#concerts').append(
           `<h1 class="h1 text-white"> Concerts </h1>
           <h1><a target="_blank" href="${data.url}" class="genric-btn success circle">${data.title} at ${data.venue_name} on ${date} </a></h1>
           <p class="text-white"> ${data.description} </p>
           <p class="spotify-link"> Learn more about <a target="_blank" class="spotify-link" href="${data.venue_url}">${data.venue_name}</a> </p>
-          <h3 class="genric-btn success circle id="btn-setlist">Check Out a Recent Setlist! </h3>`
+          <h3 class="genric-btn success circle" id="btn-setlist">Check Out a Recent Setlist! </h3>`
         );   
 
+        $('#btn-setlist').click(function() {
+          $('#setlist-section').show();
+          
+        });
 
       }
       else {
         $('#concerts').append(
         `<h1 class="spotify-link"> Concerts </h1> 
-        <p class="spotify-link">No upcomming concerts in your location</p>`);
+        <p class="spotify-link">No upcomming concerts in your location</p>
+        `);
       }
     }
     else {
       $('#concerts').append(
       `<h1 class="spotify-link"> Concerts </h1> 
-      <p class="spotify-link">No upcomming concerts in your location</p>`);
-    }
-    });
+      <p class="spotify-link">No upcomming concerts in your location</p>
+      `);
+    }});
 
 
 
@@ -135,7 +119,6 @@ button.addEventListener('click', function( ) {
         
 
     if (response.artists.items[0]) {
-      console.log(response);
       artist = response.artists.items[0];
       $('#artist-name').text(artist.name);
       $('#artist-img').removeAttr("hidden");
@@ -161,12 +144,21 @@ button.addEventListener('click', function( ) {
 								<div class="visit">Actions</div>
               </div>`);
               songs.forEach(function(song, i) {
+                let genSearch = song.name
+                songStr =  (genSearch.replace(/ *\([^)]*\) */g, "").split(/[-.?!]/)[0]).replace(/[^\w\s]/g, '').replace(/ /g,'-').replace(/--/g, '-');
+                if (songStr[songStr.length -1] === '-'){
+                  genSearch = `${artist.name.replace(/ /g,'-')}-${songStr}lyrics` ;
+                }
+                else{
+                  genSearch = `${artist.name.replace(/ /g,'-')}-${songStr}-lyrics` ;
+                }
+
                $('#song-table').append(
 							`<div class="table-row">
 								<div class="serial">${i+1}</div>
 								<div class="country">${song.name}</div>
-								<div class="visit">${minutes(song.duration_ms)}</div>
-								<div class="visit"><a target="_blank" class="spotify-link" href="${song.external_urls.spotify}">Listen on Spotify</a></div>
+                <div class="visit">${minutes(song.duration_ms)}</div>
+								<div><a target="_blank" class="genric-btn success circle" href="${song.external_urls.spotify}">Spotify</a>  <a target=_"blank" class="genric-btn genius circle" href="https://genius.com/${genSearch}">Lyrics from Genius</a> </div>
 							</div>`
                );
               });
@@ -193,58 +185,60 @@ button.addEventListener('click', function( ) {
     console.log(error);
   });
 
-setlistButton.addEventListener('click', function () {
 
-
-
-  $.ajax(`/set/${keyword}`)
+  $.ajax(`/${keyword}`)
   .done(function(response) {
-    let setlistAvailable = false;
-    let setlists = response.setlist;
-    console.log(setlists);
-    setlists.forEach(function(setlist, i) {
-      if (setlist.sets[i].set.length !== 0) {
-        console.log("Setlist ", i, setlist.sets[i].set)
-        setlistList = setlist.sets.set;
-        console.log(setlistList);
-        continue
-      } 
-      else
-      { setlistAvailable = false;
-        console.log("Bad Query");
-        // $('#concerts').append(
-        //   `<h3> We Couldn't find a recent ssetlist for this arts :(</h3>`
-        // )
+    $('#setlist').empty();
+    $('#setlist-header').empty();
+    $('#setlist-date').empty();
+    
+    let songSet;  
+    let concertData;  
+    response.setlist.forEach(function(concert) {
+      if (concert.sets.set.length > 0) {
+        if (songSet === undefined) {
+        songSet = concert.sets.set;
+        concertData = concert;
+        }
+        else {
+          songSet = songSet;
+        }
+      }
+      else {
+        songSet = songSet;
       }
 
-    });
+
+        })
+        if (songSet.length >  0) {
+          songSet.forEach(function(set) {
+            if (set.encore) {
+              $('#setlist').append(
+                `<h3 class="text-white">Encore:</h3>`);
+            }
+
+            set.song.forEach(function(song) {
+              $('#setlist').append(
+                `<li class="text-white"> ${song.name}</li>`
+              )
+            })
+
+        });
+
+    };
+    if (songSet) {
+      concertDate = moment(concertData.eventDate,'DD-MM-YYYY', true).format('dddd MMMM D');
+      $('#setlist-header').text(`${concertData.artist.name} at ${concertData.venue.name} in ${concertData.venue.city.name}, ${concertData.venue.city.state}`);
+      $('#setlist-date').text(`${concertDate}`);
+    }
+
+  });
+ 
     
 
 
-    // <div class="col-md-4 mt-sm-30">
-    // 		<h3 class="mb-20">Ordered List</h3>
-    // 		<div class="">
-    // 			<ol class="ordered-list">
-    // 				<li><span>Fta Keys</span></li>
-    // 				<li><span>For Women Only Your Computer Usage</span></li>
-    // 				<li><span>Facts Why Inkjet Printing Is Very Appealing</span>
-    // 					<ol class="ordered-list-alpha">
-    // 						<li><span>Addiction When Gambling Becomes</span>
-    // 							<ol class="ordered-list-roman">
-    // 								<li><span>Protective Preventative Maintenance</span></li>
-    // 							</ol>
-    // 						</li>
-    // 					</ol>
-    // 				</li>
-    // 				<li><span>Dealing With Technical Support 10 Useful Tips</span></li>
-    // 				<li><span>Make Myspace Your Best Designed Space</span></li>
-    // 				<li><span>Cleaning And Organizing Your Computer</span></li>
-    // 			</ol>
-    // 		</div>
-    // 	</div>
-  });
 
-});
+
   
 });
-}
+

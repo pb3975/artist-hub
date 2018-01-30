@@ -37,6 +37,14 @@
   font-weight: 300;
 }
 
+#setlist {
+  margin: auto;
+  text-align: center;
+}
+.setlist {
+  margin: auto;
+  text-align: center;
+}
 :-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #777777;
@@ -111,6 +119,11 @@ a, a:focus, a:hover {
 .btn i, .btn-large i, .btn-floating i, .btn-large i, .btn-flat i {
   font-size: 1em;
   line-height: inherit;
+}
+.btn-spotify {
+  height: 100%;
+  color: #73d61c;
+
 }
 
 .gray-bg {
@@ -912,6 +925,12 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   background: #73d61c;
   border: 1px solid transparent;
+}
+.genric-btn.genius {
+  color: #000;
+  background: #ffff64;
+  border: 1px solid transparent;
+
 }
 
 .genric-btn.success:hover {
@@ -2140,6 +2159,7 @@ nav a:hover {
   }
 }
 
+
 .studio-area {
   position: relative;
   background: url(../img/studio-bg.jpg) no-repeat center center/cover;
@@ -2265,7 +2285,7 @@ nav a:hover {
 
 .video-area {
   position: relative;
-  background: url(../img/video-area-bg.jpg) no-repeat center center/cover;
+  background: no-repeat center center/cover;
 }
 
 .video-area .overlay-bg {
@@ -2484,7 +2504,7 @@ nav a:hover {
 
 .footer-widget-area {
   position: relative;
-  background: url(../img/f-bg.jpg) no-repeat center center/cover;
+  background: no-repeat center center/cover;
 }
 
 .footer-widget-area .overlay-bg {
@@ -2588,7 +2608,7 @@ nav a:hover {
 
 .about-generic-area {
   position: relative;
-  background: url(../img/g-bg.jpg) no-repeat center center/cover;
+  background: no-repeat center center/cover;
 }
 
 .about-generic-area .overlay-bg {
